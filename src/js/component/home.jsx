@@ -1,22 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Home = () => {
+
+  useEffect(() => {
+    fetch('https://assets.breatheco.de/apis/fake/todos/user/theuser',{
+      method: "GET",
+    })
+    .then(response => response.text())
+    .then(result => console.log(result))
+  });
+
   const [input, setInput] = useState("");
   const [tasks, setTasks] = useState([]);
-
-  const handleInput = (e) => {
-    setInput(e.target.value);
-  };
-
-  const handleClick = () => {
-    if (input.length === 0) {
-      alert("Please add a task");
-    } else {
-      setTasks(tasks.concat([input]));
-	  setInput("");
+  const tasksList = tasks.map((item)=>{
+    return {
+       "label": item,
+       "done": false
+   }
+  });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (input !== "") {
+        setTasks([...tasks, input])
+        setInput("");
     }
-  };
+    fetch('https://assets.breatheco.de/apis/fake/todos/user/todouser', {
+        method: "PUT",
+        body: JSON.stringify(tasksList),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        // .then(response => response.text())
+        // .then(result => console.log(result))
+        // .catch(error => console.log('error', error));
 
+};
   const deleting = () => {
     setTasks([]);
   };
@@ -28,31 +47,31 @@ const Home = () => {
     Things to do
   </div>
 		<div className="card-body">
-        <form className="d-flex" role="input">
+        <form onSubmit={handleSubmit} className="d-flex" role="input">
           <input
+            onChange={(e) => { setInput(e.target.value) }}
             className="form-control me-2"
             type="text"
-			value={input}
+			      value={input}
             placeholder="Add Task"
-            aria-label="Input"
-            onChange={handleInput}
           />
           <button
             className="btn btn-outline-success"
             type="button"
-            onClick={handleClick}
+            onClick={handleSubmit}
           >
             +
           </button>
         </form>
         <div>
 			{tasks.map((item, index) => (
-				<div className="row d-flex p-1 mt-2 border border-light rounded">
+				<div key={index} className="row d-flex p-1 mt-2 border border-light rounded">
 					<div className="col-6">{item}{""}</div>
 					<div className="col-6 text-end">
-					<i class="fas fa-check"
+					<i className="fas fa-check"
                                 onClick={
-                                    () => setTasks(tasks.filter((divElem,currentIndex) => index != currentIndex))
+                                    () => setTasks(tasks.filter((_, currentIndex) => {
+                                      return index != currentIndex}))
                             }></i>
 					</div>
 				</div>
