@@ -5,14 +5,13 @@ const Home = () => {
 useEffect(() =>
 fetch('https://assets.breatheco.de/apis/fake/todos/user/theuser')
     .then((response)=>response.json())
-    .then((data) => setTasks(data.map(d => d.label)))
-    .then((data)=>console.log(data))
+    .then((data) => setTasks(data.map(a => a.label)))
 ,[])   
 
 useEffect(() =>
 fetch('https://assets.breatheco.de/apis/fake/todos/user/theuser', {
    method: "PUT",
-   body: JSON.stringify(tasks.map(it => ({ label: it, done: false }))),
+   body: JSON.stringify(tasks.map(task => ({ label: task, done: false }))),
    headers: {
      "Content-Type": "application/json"
    }
@@ -26,12 +25,11 @@ fetch('https://assets.breatheco.de/apis/fake/todos/user/theuser', {
     if (input !== "") {
         setTasks(tasks.concat(input))
         setInput("");
+    }else if (input===""){
+      alert("Ready to add some tasks!")
     }
 };
 
-  const deleting = () => {
-    setTasks([]);
-  };
 
   return (
     <>
@@ -57,7 +55,7 @@ fetch('https://assets.breatheco.de/apis/fake/todos/user/theuser', {
           </button>
         </form>
         <div>
-        <ul className="list-group">
+        <ul className="list-group" id="taskslist">
                     {tasks.map((item, index) => (
                         <li key={index} className="list-group-item d-flex justify-content-between">
                                 {item}
@@ -83,13 +81,11 @@ fetch('https://assets.breatheco.de/apis/fake/todos/user/theuser', {
 		<button
           className="btn btn-outline-warning"
           type="button"
-          onClick={deleting}
+          onClick={() =>setTasks([])}
         >
           Delete all
         </button>
 		</div>
-
-		
 		</div>
       </div>
     </>
