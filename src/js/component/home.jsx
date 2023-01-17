@@ -1,3 +1,4 @@
+//a
 import React, { useState, useEffect } from "react";
 
 const Home = () => {
@@ -18,7 +19,7 @@ fetch('https://assets.breatheco.de/apis/fake/todos/user/theuser', {
  }, [tasks]))
 
   const [input, setInput] = useState("");
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(["sample task (you can delete me!)"]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -35,7 +36,7 @@ fetch('https://assets.breatheco.de/apis/fake/todos/user/theuser', {
     <>
       <div className="card mx-auto mt-4" style={{ width: 500, height: 600 }}>
 	  <div className="card-header">
-    Things to do
+    <i class="far fa-sticky-note"></i><strong>  Things to do</strong>
   </div>
 		<div className="card-body">
         <form onSubmit={handleSubmit} className="d-flex" role="input">
@@ -55,13 +56,13 @@ fetch('https://assets.breatheco.de/apis/fake/todos/user/theuser', {
           </button>
         </form>
         <div>
-        <ul className="list-group" id="taskslist">
+        <ul className="list-group mt-2" id="taskslist">
                     {tasks.map((item, index) => (
                         <li key={index} className="list-group-item d-flex justify-content-between">
                                 {item}
                             <button
                                 type="button"
-                                className="btn-close"
+                                className="btn-close btn btn-outline-danger"
                                 onClick={
                                   () => setTasks(tasks.filter((_, currentIndex) => {
                                     return index != currentIndex}))
@@ -81,7 +82,7 @@ fetch('https://assets.breatheco.de/apis/fake/todos/user/theuser', {
 		<button
           className="btn btn-outline-warning"
           type="button"
-          onClick={() =>setTasks([])}
+          onClick={() =>setTasks(["sample task (you can delete me!)"])}
         >
           Delete all
         </button>
